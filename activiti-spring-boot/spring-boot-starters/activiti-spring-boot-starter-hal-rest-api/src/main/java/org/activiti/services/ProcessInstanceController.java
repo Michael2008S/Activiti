@@ -22,6 +22,7 @@ import org.activiti.client.model.resources.assembler.ProcessInstanceResourceAsse
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.runtime.ProcessInstanceBuilder;
 import org.activiti.model.converter.ProcessInstanceConverter;
+import org.activiti.services.audit.producer.app.MessageProducerActivitiEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,12 +50,20 @@ public class ProcessInstanceController {
 
     private PageableProcessInstanceService pageableProcessInstanceService;
 
+    private MessageProducerActivitiEventListener listener;
+
     @Autowired
-    public ProcessInstanceController(ProcessInstanceConverter processInstanceConverter, RuntimeService runtimeService, ProcessInstanceResourceAssembler resourceAssembler, PageableProcessInstanceService pageableProcessInstanceService) {
+    public ProcessInstanceController(ProcessInstanceConverter processInstanceConverter,
+                                     RuntimeService runtimeService,
+                                     ProcessInstanceResourceAssembler resourceAssembler,
+                                     PageableProcessInstanceService pageableProcessInstanceService,
+                                     MessageProducerActivitiEventListener listener) {
         this.processInstanceConverter = processInstanceConverter;
         this.runtimeService = runtimeService;
         this.resourceAssembler = resourceAssembler;
         this.pageableProcessInstanceService = pageableProcessInstanceService;
+        this.listener = listener;
+        this.runtimeService.addEventListener(listener);
     }
 
     @RequestMapping(method = RequestMethod.GET)
