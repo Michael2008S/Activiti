@@ -17,9 +17,8 @@ package org.activiti.client.model;
 
 import java.util.Map;
 
-/**
+import org.activiti.services.model.ProcessInstance;
 
- */
 public class ExtendedProcessInstance extends ProcessInstance {
 
     private Map<String, Object> variables;

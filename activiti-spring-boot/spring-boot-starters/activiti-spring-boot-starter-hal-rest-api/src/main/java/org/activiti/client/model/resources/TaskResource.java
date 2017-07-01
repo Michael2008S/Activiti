@@ -15,17 +15,15 @@
 
 package org.activiti.client.model.resources;
 
-import org.activiti.client.model.Task;
+import org.activiti.services.model.Task;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 
-/**
-
- */
 public class TaskResource extends Resource<Task> {
 
-    public TaskResource(Task content, Iterable<Link> links) {
-        super(content, links);
+    public TaskResource(Task content,
+                        Iterable<Link> links) {
+        super(content,
+              links);
     }
-
 }

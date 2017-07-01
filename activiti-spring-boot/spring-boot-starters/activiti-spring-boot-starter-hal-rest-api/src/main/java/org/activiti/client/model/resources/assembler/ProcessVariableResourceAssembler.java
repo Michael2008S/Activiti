@@ -26,21 +26,20 @@ import org.springframework.stereotype.Component;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-/**
-
- */
 @Component
 public class ProcessVariableResourceAssembler extends ResourceAssemblerSupport<ExtendedProcessInstance, VariablesResource> {
 
     public ProcessVariableResourceAssembler() {
-        super(ProcessInstanceVariableController.class, VariablesResource.class);
+        super(ProcessInstanceVariableController.class,
+              VariablesResource.class);
     }
 
     @Override
     public VariablesResource toResource(ExtendedProcessInstance processInstance) {
         Link selfRel = linkTo(methodOn(ProcessInstanceVariableController.class).getVariables(processInstance.getId())).withSelfRel();
         Link processInstanceRel = linkTo(methodOn(ProcessInstanceController.class).getProcessInstance(processInstance.getId())).withRel("processInstance");
-        return new VariablesResource(processInstance.getVariables(), selfRel, processInstanceRel);
+        return new VariablesResource(processInstance.getVariables(),
+                                     selfRel,
+                                     processInstanceRel);
     }
-
 }

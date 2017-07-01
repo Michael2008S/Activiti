@@ -16,6 +16,8 @@
 package org.activiti.model.converter;
 
 import org.activiti.client.model.User;
+import org.activiti.services.model.converter.ListConverter;
+import org.activiti.services.model.converter.ModelConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

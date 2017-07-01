@@ -15,9 +15,10 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableBinding(AuditProducerChannels.class)
 public class Application {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class,
+                              args);
+    }
 
     @Bean
     InitializingBean usersAndGroupsInitializer(final IdentityService identityService) {
@@ -29,16 +30,20 @@ public class Application {
             group.setType("security-role");
             identityService.saveGroup(group);
 
-            createUser("admin", "admin", identityService);
-            createUser("john", "pass", identityService);
-
+            createUser("admin",
+                       "admin",
+                       identityService);
+            createUser("john",
+                       "pass",
+                       identityService);
         };
     }
 
-    private void createUser(String username, String password, IdentityService identityService) {
+    private void createUser(String username,
+                            String password,
+                            IdentityService identityService) {
         User admin = identityService.newUser(username);
         admin.setPassword(password);
         identityService.saveUser(admin);
     }
-
 }
