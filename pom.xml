@@ -22,6 +22,7 @@
     <!-- JVM params for test execution -->
     <argLine>-Duser.language=en</argLine>
 
+
     <spring.boot.version>2.0.0.M2</spring.boot.version>
     <spring.cloud.version>Finchley.BUILD-SNAPSHOT</spring.cloud.version>
     <spring.cloud.stream.version>Elmhurst.BUILD-SNAPSHOT</spring.cloud.stream.version>
