@@ -31,6 +31,14 @@
         <!-- plugins -->
         <maven.enforcer.plugin.version>1.4.1</maven.enforcer.plugin.version>
         <jacoco.maven.plugin.version>0.7.9</jacoco.maven.plugin.version>
+
+
+			<!--keycloak snapshot that was used to build boot2 adapter
+      the original snapshot doesn't contain the boot2 adapter, just this particular build
+      see https://issues.jboss.org/browse/KEYCLOAK-5098
+      https://github.com/keycloak/keycloak/pull/4279
+      -->
+			<keycloak.version>3.2.0.CR1-SNAPSHOT</keycloak.version>
 		</properties>
 
 	<repositories>
@@ -41,6 +49,14 @@
         <snapshots>
             <enabled>false</enabled>
         </snapshots>
+    </repository>
+    <repository> <!-- Using snapshot repo to temporarily keep keycloak adapter -->
+      <id>activiti-snapshots</id>
+      <name>Activiti Snapshots</name>
+      <url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
 </repositories>
 
@@ -350,6 +366,36 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+<dependency>
+  <groupId>org.keycloak</groupId>
+  <artifactId>keycloak-spring-boot-2-adapter</artifactId>
+  <version>${keycloak.version}</version>
+</dependency>
+
+			<!--
+			keycloak boot 2 adapter only proven with jetty and undertow
+			see https://github.com/keycloak/keycloak/pull/4279
+	<dependency>
+		<groupId>org.keycloak</groupId>
+		<artifactId>keycloak-tomcat8-adapter</artifactId>
+		<version>3.1.0.Final</version>
+	</dependency>
+	-->
+			<!--
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-undertow-adapter</artifactId>
+				<version>${keycloak.version}</version>
+			</dependency>
+-->
+
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-jetty94-adapter</artifactId>
+				<version>3.1.0.Final</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-core</artifactId>
