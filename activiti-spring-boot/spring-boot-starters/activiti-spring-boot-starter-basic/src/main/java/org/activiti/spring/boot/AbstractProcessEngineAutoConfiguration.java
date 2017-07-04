@@ -189,7 +189,6 @@ public abstract class AbstractProcessEngineAutoConfiguration
     return super.managementServiceBeanBean(processEngine);
   }
 
-
   @Bean
   @ConditionalOnMissingBean
   public TaskExecutor taskExecutor() {

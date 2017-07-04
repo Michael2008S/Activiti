@@ -358,7 +358,7 @@ public class HistoricTaskAndVariablesQueryTest extends PluggableActivitiTestCase
       groups.add("accountancy");
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateGroupIn(groups).list();
       assertEquals(1, tasks.size());
-      
+
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).taskCandidateGroupIn(groups).list();
       assertEquals(3, tasks.size());
       
@@ -381,7 +381,7 @@ public class HistoricTaskAndVariablesQueryTest extends PluggableActivitiTestCase
 
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateGroup("management").list();
       assertEquals(1, tasks.size());
-      
+
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).taskCandidateGroupIn(Arrays.asList("management")).list();
       assertEquals(3, tasks.size());
       

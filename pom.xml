@@ -28,9 +28,6 @@
 			<mockito.version>2.7.22</mockito.version>
 			<assertj.version>3.8.0</assertj.version>
 
-
-        <spring.boot.version>2.0.0.M1</spring.boot.version>
-
         <!--keycloak snapshot that was used to build boot2 adapter
         the original snapshot doesn't contain the boot2 adapter, just this particular build
         see https://issues.jboss.org/browse/KEYCLOAK-5098
@@ -395,7 +392,6 @@
 				<artifactId>keycloak-spring-boot-2-adapter</artifactId>
 				<version>${keycloak.version}</version>
 			</dependency>
-
 
 			<!--
 			keycloak boot 2 adapter only proven with jetty and undertow
