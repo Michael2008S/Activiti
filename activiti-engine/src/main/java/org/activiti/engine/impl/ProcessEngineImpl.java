@@ -17,7 +17,6 @@ import java.util.Map;
 import org.activiti.engine.DynamicBpmnService;
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
-import org.activiti.engine.IdentityService;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
@@ -45,7 +44,6 @@ public class ProcessEngineImpl implements ProcessEngine {
   protected RepositoryService repositoryService;
   protected RuntimeService runtimeService;
   protected HistoryService historicDataService;
-  protected IdentityService identityService;
   protected TaskService taskService;
   protected FormService formService;
   protected ManagementService managementService;
@@ -62,7 +60,6 @@ public class ProcessEngineImpl implements ProcessEngine {
     this.repositoryService = processEngineConfiguration.getRepositoryService();
     this.runtimeService = processEngineConfiguration.getRuntimeService();
     this.historicDataService = processEngineConfiguration.getHistoryService();
-    this.identityService = processEngineConfiguration.getIdentityService();
     this.taskService = processEngineConfiguration.getTaskService();
     this.formService = processEngineConfiguration.getFormService();
     this.managementService = processEngineConfiguration.getManagementService();
@@ -115,10 +112,6 @@ public class ProcessEngineImpl implements ProcessEngine {
 
   public String getName() {
     return name;
-  }
-
-  public IdentityService getIdentityService() {
-    return identityService;
   }
 
   public ManagementService getManagementService() {

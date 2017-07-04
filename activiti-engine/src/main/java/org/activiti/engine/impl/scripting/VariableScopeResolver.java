@@ -40,11 +40,10 @@ public class VariableScopeResolver implements Resolver {
   protected static final String managementServiceKey = "managementService";
   protected static final String historyServiceKey = "historyService";
   protected static final String formServiceKey = "formService";
-  protected static final String identityServiceKey = "identityServiceKey";
   
   protected static final List<String> KEYS = Arrays.asList( 
       processEngineConfigurationKey, runtimeServiceKey, taskServiceKey, 
-      repositoryServiceKey, managementServiceKey, historyServiceKey, formServiceKey, identityServiceKey);
+      repositoryServiceKey, managementServiceKey, historyServiceKey, formServiceKey);
   
 
   public VariableScopeResolver(ProcessEngineConfigurationImpl processEngineConfiguration, VariableScope variableScope) {
@@ -83,8 +82,6 @@ public class VariableScopeResolver implements Resolver {
       return processEngineConfiguration.getManagementService();
     } else if (formServiceKey.equals(key)) {
       return processEngineConfiguration.getFormService();
-    } else if (identityServiceKey.equals(key)) {
-      return processEngineConfiguration.getIdentityService();
     }
 
     return variableScope.getVariable((String) key);

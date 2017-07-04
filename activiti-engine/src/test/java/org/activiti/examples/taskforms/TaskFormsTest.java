@@ -27,16 +27,6 @@ import org.activiti.engine.test.Deployment;
  */
 public class TaskFormsTest extends PluggableActivitiTestCase {
 
-  public void setUp() throws Exception {
-    identityService.saveUser(identityService.newUser("fozzie"));
-    identityService.saveGroup(identityService.newGroup("management"));
-    identityService.createMembership("fozzie", "management");
-  }
-
-  public void tearDown() throws Exception {
-    identityService.deleteGroup("management");
-    identityService.deleteUser("fozzie");
-  }
 
   @Deployment(resources = { "org/activiti/examples/taskforms/VacationRequest_deprecated_forms.bpmn20.xml", "org/activiti/examples/taskforms/approve.form",
       "org/activiti/examples/taskforms/request.form", "org/activiti/examples/taskforms/adjustRequest.form" })

@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiIllegalArgumentException;
-import org.activiti.engine.identity.Group;
 import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.interceptor.CommandContext;
 import org.activiti.engine.impl.interceptor.CommandExecutor;
@@ -273,7 +272,7 @@ public class ProcessDefinitionQueryImpl extends AbstractQuery<ProcessDefinitionQ
     this.eventSubscriptionName = eventName;
     return this;
   }
-
+/*
   public List<String> getAuthorizationGroups() {
     // Similar behaviour as the TaskQuery.taskCandidateUser() which
     // includes the groups the candidate
@@ -287,7 +286,7 @@ public class ProcessDefinitionQueryImpl extends AbstractQuery<ProcessDefinitionQ
       return groupIds;
     }
     return null;
-  }
+  }*/
 
   // sorting ////////////////////////////////////////////
 

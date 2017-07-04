@@ -255,8 +255,6 @@ public abstract class ProcessEngineConfiguration {
 
   public abstract HistoryService getHistoryService();
 
-  public abstract IdentityService getIdentityService();
-
   public abstract ManagementService getManagementService();
 
   public abstract ProcessEngineConfiguration getProcessEngineConfiguration();

@@ -46,28 +46,22 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
 
   private List<String> taskIds;
 
+  private static final String KERMIT = "kermit";
+  private static final List<String> KERMITSGROUPS = Arrays.asList("management","accountancy");
+
+  private static final String GONZO = "gonzo";
+  private static final List<String> GONZOSGROUPS = Arrays.asList();
+
+  private static final String FOZZIE = "fozzie";
+  private static final List<String> FOZZIESGROUPS = Arrays.asList("management");
+
   public void setUp() throws Exception {
-
-    identityService.saveUser(identityService.newUser("kermit"));
-    identityService.saveUser(identityService.newUser("gonzo"));
-    identityService.saveUser(identityService.newUser("fozzie"));
-
-    identityService.saveGroup(identityService.newGroup("management"));
-    identityService.saveGroup(identityService.newGroup("accountancy"));
-
-    identityService.createMembership("kermit", "management");
-    identityService.createMembership("kermit", "accountancy");
-    identityService.createMembership("fozzie", "management");
 
     taskIds = generateTestTasks();
   }
 
   public void tearDown() throws Exception {
-    identityService.deleteGroup("accountancy");
-    identityService.deleteGroup("management");
-    identityService.deleteUser("fozzie");
-    identityService.deleteUser("gonzo");
-    identityService.deleteUser("kermit");
+
     taskService.deleteTasks(taskIds, true);
   }
 
@@ -530,44 +524,44 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryByAssignee() {
-    TaskQuery query = taskService.createTaskQuery().taskAssignee("gonzo");
+    TaskQuery query = taskService.createTaskQuery().taskAssignee(GONZO);
     assertEquals(1, query.count());
     assertEquals(1, query.list().size());
     assertNotNull(query.singleResult());
 
-    query = taskService.createTaskQuery().taskAssignee("kermit");
+    query = taskService.createTaskQuery().taskAssignee(KERMIT);
     assertEquals(0, query.count());
     assertEquals(0, query.list().size());
     assertNull(query.singleResult());
   }
 
   public void testQueryByAssigneeOr() {
-    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskAssignee("gonzo");
+    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskAssignee(GONZO);
     assertEquals(1, query.count());
     assertEquals(1, query.list().size());
     assertNotNull(query.singleResult());
 
-    query = taskService.createTaskQuery().or().taskId("invalid").taskAssignee("kermit");
+    query = taskService.createTaskQuery().or().taskId("invalid").taskAssignee(KERMIT);
     assertEquals(0, query.count());
     assertEquals(0, query.list().size());
     assertNull(query.singleResult());
   }
   
   public void testQueryByAssigneeIds() {
-	    TaskQuery query = taskService.createTaskQuery().taskAssigneeIds(Arrays.asList("gonzo", "kermit"));
+	    TaskQuery query = taskService.createTaskQuery().taskAssigneeIds(Arrays.asList(GONZO, KERMIT));
 	    assertEquals(1, query.count());
 	    assertEquals(1, query.list().size());
 	    assertNotNull(query.singleResult());
 
-	    query = taskService.createTaskQuery().taskAssigneeIds(Arrays.asList("kermit", "kermit2"));
+	    query = taskService.createTaskQuery().taskAssigneeIds(Arrays.asList(KERMIT, "kermit2"));
 	    assertEquals(0, query.count());
 	    assertEquals(0, query.list().size());
 	    assertNull(query.singleResult());
 
 	    if (processEngineConfiguration.getHistoryLevel().isAtLeast(HistoryLevel.AUDIT)) {
 	      // History
-	      assertEquals(1, historyService.createHistoricTaskInstanceQuery().taskAssigneeIds(Arrays.asList("gonzo", "kermit")).count());
-	      assertEquals(0, historyService.createHistoricTaskInstanceQuery().taskAssigneeIds(Arrays.asList("kermit", "kermit2")).count());
+	      assertEquals(1, historyService.createHistoricTaskInstanceQuery().taskAssigneeIds(Arrays.asList(GONZO, KERMIT)).count());
+	      assertEquals(0, historyService.createHistoricTaskInstanceQuery().taskAssigneeIds(Arrays.asList(KERMIT, "kermit2")).count());
 	    }
 
 	    Task adhocTask = taskService.newTask();
@@ -575,32 +569,32 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
 	    adhocTask.setAssignee("testAssignee");
 	    taskService.saveTask(adhocTask);
 
-	    query = taskService.createTaskQuery().taskAssigneeIds(Arrays.asList("gonzo", "testAssignee"));
+	    query = taskService.createTaskQuery().taskAssigneeIds(Arrays.asList(GONZO, "testAssignee"));
 	    assertEquals(2, query.count());
 	    assertEquals(2, query.list().size());
 
 	    if (processEngineConfiguration.getHistoryLevel().isAtLeast(HistoryLevel.AUDIT)) {
 	      // History
-	      assertEquals(2, historyService.createHistoricTaskInstanceQuery().taskAssigneeIds(Arrays.asList("gonzo", "testAssignee")).count());
+	      assertEquals(2, historyService.createHistoricTaskInstanceQuery().taskAssigneeIds(Arrays.asList(GONZO, "testAssignee")).count());
 	    }
 
 	    taskService.deleteTask(adhocTask.getId(), true);
 	  }
 
 	  public void testQueryByAssigneeIdsOr() {
-	    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList("gonzo", "kermit"));
+	    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList(GONZO, KERMIT));
 	    assertEquals(1, query.count());
 	    assertEquals(1, query.list().size());
 	    assertNotNull(query.singleResult());
 
-	    query = taskService.createTaskQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList("kermit", "kermit2"));
+	    query = taskService.createTaskQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList(KERMIT, "kermit2"));
 	    assertEquals(0, query.count());
 	    assertEquals(0, query.list().size());
 	    assertNull(query.singleResult());
 
 	    if (processEngineConfiguration.getHistoryLevel().isAtLeast(HistoryLevel.AUDIT)) {
-	      assertEquals(1, historyService.createHistoricTaskInstanceQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList("gonzo", "kermit")).count());
-	      assertEquals(0, historyService.createHistoricTaskInstanceQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList("kermit", "kermit2")).count());
+	      assertEquals(1, historyService.createHistoricTaskInstanceQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList(GONZO, KERMIT)).count());
+	      assertEquals(0, historyService.createHistoricTaskInstanceQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList(KERMIT, "kermit2")).count());
 	    }
 
 	    Task adhocTask = taskService.newTask();
@@ -608,12 +602,12 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
 	    adhocTask.setAssignee("testAssignee");
 	    taskService.saveTask(adhocTask);
 
-	    query = taskService.createTaskQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList("gonzo", "testAssignee"));
+	    query = taskService.createTaskQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList(GONZO, "testAssignee"));
 	    assertEquals(2, query.count());
 	    assertEquals(2, query.list().size());
 
 	    if (processEngineConfiguration.getHistoryLevel().isAtLeast(HistoryLevel.AUDIT)) {
-	      assertEquals(2, historyService.createHistoricTaskInstanceQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList("gonzo", "testAssignee")).count());
+	      assertEquals(2, historyService.createHistoricTaskInstanceQuery().or().taskId("invalid").taskAssigneeIds(Arrays.asList(GONZO, "testAssignee")).count());
 	    }
 
 	    taskService.deleteTask(adhocTask.getId(), true);
@@ -622,16 +616,16 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   public void testQueryByInvolvedUser() {
     try {
       Task adhocTask = taskService.newTask();
-      adhocTask.setAssignee("kermit");
-      adhocTask.setOwner("fozzie");
+      adhocTask.setAssignee(KERMIT);
+      adhocTask.setOwner(FOZZIE);
       taskService.saveTask(adhocTask);
-      taskService.addUserIdentityLink(adhocTask.getId(), "gonzo", "customType");
+      taskService.addUserIdentityLink(adhocTask.getId(), GONZO, "customType");
 
       assertEquals(3, taskService.getIdentityLinksForTask(adhocTask.getId()).size());
 
-      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).taskInvolvedUser("gonzo").count());
-      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).taskInvolvedUser("kermit").count());
-      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).taskInvolvedUser("fozzie").count());
+      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).taskInvolvedUser(GONZO).count());
+      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).taskInvolvedUser(KERMIT).count());
+      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).taskInvolvedUser(FOZZIE).count());
 
     } finally {
       List<Task> allTasks = taskService.createTaskQuery().list();
@@ -649,8 +643,8 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   public void testQueryByInvolvedGroup() {
     try {
       Task adhocTask = taskService.newTask();
-      adhocTask.setAssignee("kermit");
-      adhocTask.setOwner("fozzie");
+      adhocTask.setAssignee(KERMIT);
+      adhocTask.setOwner(FOZZIE);
       taskService.saveTask(adhocTask);
       taskService.addGroupIdentityLink(adhocTask.getId(), "group1", IdentityLinkType.PARTICIPANT);
 
@@ -676,16 +670,16 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   public void testQueryByInvolvedUserOr() {
     try {
       Task adhocTask = taskService.newTask();
-      adhocTask.setAssignee("kermit");
-      adhocTask.setOwner("fozzie");
+      adhocTask.setAssignee(KERMIT);
+      adhocTask.setOwner(FOZZIE);
       taskService.saveTask(adhocTask);
-      taskService.addUserIdentityLink(adhocTask.getId(), "gonzo", "customType");
+      taskService.addUserIdentityLink(adhocTask.getId(), GONZO, "customType");
 
       assertEquals(3, taskService.getIdentityLinksForTask(adhocTask.getId()).size());
 
-      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).or().taskId("invalid").taskInvolvedUser("gonzo").count());
-      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).or().taskId("invalid").taskInvolvedUser("kermit").count());
-      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).or().taskId("invalid").taskInvolvedUser("fozzie").count());
+      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).or().taskId("invalid").taskInvolvedUser(GONZO).count());
+      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).or().taskId("invalid").taskInvolvedUser(KERMIT).count());
+      assertEquals(1, taskService.createTaskQuery().taskId(adhocTask.getId()).or().taskId("invalid").taskInvolvedUser(FOZZIE).count());
 
     } finally {
       List<Task> allTasks = taskService.createTaskQuery().list();
@@ -731,7 +725,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryByCandidateUser() {
-    TaskQuery query = taskService.createTaskQuery().taskCandidateUser("kermit");
+    TaskQuery query = taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS);
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
     try {
@@ -741,7 +735,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
       // OK
     }
 
-    query = taskService.createTaskQuery().taskCandidateUser("fozzie");
+    query = taskService.createTaskQuery().taskCandidateUser(FOZZIE);
     assertEquals(3, query.count());
     assertEquals(3, query.list().size());
     try {
@@ -753,7 +747,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryByCandidateUserOr() {
-    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser("kermit");
+    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS);
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
     try {
@@ -763,7 +757,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
       // OK
     }
 
-    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser("fozzie");
+    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser(FOZZIE);
     assertEquals(3, query.count());
     assertEquals(3, query.list().size());
     try {
@@ -823,7 +817,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryByCandidateOrAssigned() {
-    TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned("kermit");
+    TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(KERMIT);
     assertEquals(11, query.count());
     List<Task> tasks = query.list();
     assertEquals(11, tasks.size());
@@ -834,12 +828,12 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     candidateGroups.add("management");
     candidateGroups.add("accountancy");
     candidateGroups.add("noexist");
-    query = taskService.createTaskQuery().taskCandidateGroupIn(candidateGroups).taskCandidateOrAssigned("kermit");
+    query = taskService.createTaskQuery().taskCandidateGroupIn(candidateGroups).taskCandidateOrAssigned(KERMIT);
     assertEquals(11, query.count());
     tasks = query.list();
     assertEquals(11, tasks.size());
 
-    query = taskService.createTaskQuery().taskCandidateOrAssigned("fozzie");
+    query = taskService.createTaskQuery().taskCandidateOrAssigned(FOZZIE);
     assertEquals(3, query.count());
     assertEquals(3, query.list().size());
 
@@ -848,10 +842,10 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     task.setName("assigneeToKermit");
     task.setDescription("testTask description");
     task.setPriority(3);
-    task.setAssignee("kermit");
+    task.setAssignee(KERMIT);
     taskService.saveTask(task);
 
-    query = taskService.createTaskQuery().taskCandidateOrAssigned("kermit");
+    query = taskService.createTaskQuery().taskCandidateOrAssigned(KERMIT);
     assertEquals(12, query.count());
     tasks = query.list();
     assertEquals(12, tasks.size());
@@ -864,7 +858,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryByCandidateOrAssignedOr() {
-    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned("kermit");
+    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned(KERMIT);
     assertEquals(11, query.count());
     List<Task> tasks = query.list();
     assertEquals(11, tasks.size());
@@ -875,12 +869,12 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     candidateGroups.add("management");
     candidateGroups.add("accountancy");
     candidateGroups.add("noexist");
-    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateGroupIn(candidateGroups).taskCandidateOrAssigned("kermit");
+    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateGroupIn(candidateGroups).taskCandidateOrAssigned(KERMIT);
     assertEquals(11, query.count());
     tasks = query.list();
     assertEquals(11, tasks.size());
 
-    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned("fozzie");
+    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned(FOZZIE);
     assertEquals(3, query.count());
     assertEquals(3, query.list().size());
 
@@ -889,10 +883,10 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     task.setName("assigneeToKermit");
     task.setDescription("testTask description");
     task.setPriority(3);
-    task.setAssignee("kermit");
+    task.setAssignee(KERMIT);
     taskService.saveTask(task);
 
-    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned("kermit");
+    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned(KERMIT);
     assertEquals(12, query.count());
     tasks = query.list();
     assertEquals(12, tasks.size());
@@ -935,11 +929,11 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
       // OK
     }
     
-    query = taskService.createTaskQuery().taskCandidateUser("kermit").taskCandidateGroupIn(groups);
+    query = taskService.createTaskQuery().taskCandidateUser(KERMIT).taskCandidateGroupIn(groups);
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
     
-    query = taskService.createTaskQuery().taskCandidateUser("kermit").taskCandidateGroup("unexisting");
+    query = taskService.createTaskQuery().taskCandidateUser(KERMIT).taskCandidateGroup("unexisting");
     assertEquals(6, query.count());
     assertEquals(6, query.list().size());
     
@@ -968,11 +962,11 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
       // OK
     }
     
-    query = taskService.createTaskQuery().or().taskCandidateUser("kermit").taskCandidateGroupIn(groups).endOr();
+    query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT).taskCandidateGroupIn(groups).endOr();
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
     
-    query = taskService.createTaskQuery().or().taskCandidateUser("kermit").taskCandidateGroup("unexisting").endOr();
+    query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT).taskCandidateGroup("unexisting").endOr();
     assertEquals(6, query.count());
     assertEquals(6, query.list().size());
     
@@ -980,8 +974,8 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     assertEquals(0, query.count());
     assertEquals(0, query.list().size());
     
-    query = taskService.createTaskQuery().or().taskCandidateUser("kermit").taskCandidateGroupIn(groups).endOr()
-        .or().taskCandidateUser("gonzo").taskCandidateGroupIn(groups);
+    query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT).taskCandidateGroupIn(groups).endOr()
+        .or().taskCandidateUser(GONZO).taskCandidateGroupIn(groups);
     assertEquals(5, query.count());
     assertEquals(5, query.list().size());
     
@@ -1033,8 +1027,8 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     assertEquals(0, query.count());
     assertEquals(0, query.list().size());
 
-    String taskId = taskService.createTaskQuery().taskAssignee("gonzo").singleResult().getId();
-    taskService.delegateTask(taskId, "kermit");
+    String taskId = taskService.createTaskQuery().taskAssignee(GONZO).singleResult().getId();
+    taskService.delegateTask(taskId, KERMIT);
 
     query = taskService.createTaskQuery().taskDelegationState(null);
     assertEquals(11, query.count());
@@ -1070,8 +1064,8 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     assertEquals(0, query.count());
     assertEquals(0, query.list().size());
 
-    String taskId = taskService.createTaskQuery().or().taskId("invalid").taskAssignee("gonzo").singleResult().getId();
-    taskService.delegateTask(taskId, "kermit");
+    String taskId = taskService.createTaskQuery().or().taskId("invalid").taskAssignee(GONZO).singleResult().getId();
+    taskService.delegateTask(taskId, KERMIT);
 
     query = taskService.createTaskQuery().or().taskId("invalid").taskDelegationState(null);
     assertEquals(11, query.count());
@@ -2209,7 +2203,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryPaging() {
-    TaskQuery query = taskService.createTaskQuery().taskCandidateUser("kermit");
+    TaskQuery query = taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS);
 
     assertEquals(11, query.listPage(0, Integer.MAX_VALUE).size());
 
@@ -2707,11 +2701,11 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
       Task task = taskService.newTask();
       task.setName("testTask");
       task.setDescription("testTask description");
-      task.setOwner("gonzo");
+      task.setOwner(GONZO);
       task.setPriority(3);
       taskService.saveTask(task);
       ids.add(task.getId());
-      taskService.addCandidateUser(task.getId(), "kermit");
+      taskService.addCandidateUser(task.getId(), KERMIT);
     }
 
     processEngineConfiguration.getClock().setCurrentTime(sdf.parse("02/02/2002 02:02:02.000"));
@@ -2721,7 +2715,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     task.setDescription("gonzo description");
     task.setPriority(4);
     taskService.saveTask(task);
-    taskService.setAssignee(task.getId(), "gonzo");
+    taskService.setAssignee(task.getId(), GONZO);
     taskService.setVariable(task.getId(), "testVar", "someVariable");
     ids.add(task.getId());
 

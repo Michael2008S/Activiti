@@ -20,7 +20,6 @@ import java.util.List;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
-import org.activiti.engine.IdentityService;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngineConfiguration;
@@ -84,7 +83,6 @@ public class ActivitiRule implements TestRule {
   protected RuntimeService runtimeService;
   protected TaskService taskService;
   protected HistoryService historyService;
-  protected IdentityService identityService;
   protected ManagementService managementService;
   protected FormService formService;
 
@@ -228,7 +226,6 @@ public class ActivitiRule implements TestRule {
     runtimeService = processEngine.getRuntimeService();
     taskService = processEngine.getTaskService();
     historyService = processEngine.getHistoryService();
-    identityService = processEngine.getIdentityService();
     managementService = processEngine.getManagementService();
     formService = processEngine.getFormService();
   }
@@ -312,14 +309,6 @@ public class ActivitiRule implements TestRule {
 
   public void setHistoricDataService(HistoryService historicDataService) {
     this.historyService = historicDataService;
-  }
-
-  public IdentityService getIdentityService() {
-    return identityService;
-  }
-
-  public void setIdentityService(IdentityService identityService) {
-    this.identityService = identityService;
   }
 
   public ManagementService getManagementService() {

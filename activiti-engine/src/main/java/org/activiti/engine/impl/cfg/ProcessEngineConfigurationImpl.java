@@ -125,7 +125,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected RepositoryService repositoryService = new RepositoryServiceImpl();
   protected RuntimeService runtimeService = new RuntimeServiceImpl();
   protected HistoryService historyService = new HistoryServiceImpl(this);
-  protected IdentityService identityService = new IdentityServiceImpl();
   protected TaskService taskService = new TaskServiceImpl(this);
   protected FormService formService = new FormServiceImpl();
   protected ManagementService managementService = new ManagementServiceImpl();
@@ -158,27 +157,23 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected EventLogEntryDataManager eventLogEntryDataManager;
   protected EventSubscriptionDataManager eventSubscriptionDataManager;
   protected ExecutionDataManager executionDataManager;
-  protected GroupDataManager groupDataManager;
   protected HistoricActivityInstanceDataManager historicActivityInstanceDataManager;
   protected HistoricDetailDataManager historicDetailDataManager;
   protected HistoricIdentityLinkDataManager historicIdentityLinkDataManager;
   protected HistoricProcessInstanceDataManager historicProcessInstanceDataManager;
   protected HistoricTaskInstanceDataManager historicTaskInstanceDataManager;
   protected HistoricVariableInstanceDataManager historicVariableInstanceDataManager;
-  protected IdentityInfoDataManager identityInfoDataManager;
   protected IdentityLinkDataManager identityLinkDataManager;
   protected JobDataManager jobDataManager;
   protected TimerJobDataManager timerJobDataManager;
   protected SuspendedJobDataManager suspendedJobDataManager;
   protected DeadLetterJobDataManager deadLetterJobDataManager;
-  protected MembershipDataManager membershipDataManager;
   protected ModelDataManager modelDataManager;
   protected ProcessDefinitionDataManager processDefinitionDataManager;
   protected ProcessDefinitionInfoDataManager processDefinitionInfoDataManager;
   protected PropertyDataManager propertyDataManager;
   protected ResourceDataManager resourceDataManager;
   protected TaskDataManager taskDataManager;
-  protected UserDataManager userDataManager;
   protected VariableInstanceDataManager variableInstanceDataManager;
 
 
@@ -191,20 +186,17 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected EventLogEntryEntityManager eventLogEntryEntityManager;
   protected EventSubscriptionEntityManager eventSubscriptionEntityManager;
   protected ExecutionEntityManager executionEntityManager;
-  protected GroupEntityManager groupEntityManager;
   protected HistoricActivityInstanceEntityManager historicActivityInstanceEntityManager;
   protected HistoricDetailEntityManager historicDetailEntityManager;
   protected HistoricIdentityLinkEntityManager historicIdentityLinkEntityManager;
   protected HistoricProcessInstanceEntityManager historicProcessInstanceEntityManager;
   protected HistoricTaskInstanceEntityManager historicTaskInstanceEntityManager;
   protected HistoricVariableInstanceEntityManager historicVariableInstanceEntityManager;
-  protected IdentityInfoEntityManager identityInfoEntityManager;
   protected IdentityLinkEntityManager identityLinkEntityManager;
   protected JobEntityManager jobEntityManager;
   protected TimerJobEntityManager timerJobEntityManager;
   protected SuspendedJobEntityManager suspendedJobEntityManager;
   protected DeadLetterJobEntityManager deadLetterJobEntityManager;
-  protected MembershipEntityManager membershipEntityManager;
   protected ModelEntityManager modelEntityManager;
   protected ProcessDefinitionEntityManager processDefinitionEntityManager;
   protected ProcessDefinitionInfoEntityManager processDefinitionInfoEntityManager;
@@ -212,7 +204,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected ResourceEntityManager resourceEntityManager;
   protected TableDataManager tableDataManager;
   protected TaskEntityManager taskEntityManager;
-  protected UserEntityManager userEntityManager;
   protected VariableInstanceEntityManager variableInstanceEntityManager;
 
   // History Manager
@@ -821,7 +812,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     initService(repositoryService);
     initService(runtimeService);
     initService(historyService);
-    initService(identityService);
     initService(taskService);
     initService(formService);
     initService(managementService);
@@ -1111,9 +1101,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (executionDataManager == null) {
       executionDataManager = new MybatisExecutionDataManager(this);
     }
-    if (groupDataManager == null) {
-      groupDataManager = new MybatisGroupDataManager(this);
-    }
     if (historicActivityInstanceDataManager == null) {
       historicActivityInstanceDataManager = new MybatisHistoricActivityInstanceDataManager(this);
     }
@@ -1132,9 +1119,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (historicVariableInstanceDataManager == null) {
       historicVariableInstanceDataManager = new MybatisHistoricVariableInstanceDataManager(this);
     }
-    if (identityInfoDataManager == null) {
-      identityInfoDataManager = new MybatisIdentityInfoDataManager(this);
-    }
     if (identityLinkDataManager == null) {
       identityLinkDataManager = new MybatisIdentityLinkDataManager(this);
     }
@@ -1149,9 +1133,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
     if (deadLetterJobDataManager == null) {
       deadLetterJobDataManager = new MybatisDeadLetterJobDataManager(this);
-    }
-    if (membershipDataManager == null) {
-      membershipDataManager = new MybatisMembershipDataManager(this);
     }
     if (modelDataManager == null) {
       modelDataManager = new MybatisModelDataManager(this);
@@ -1170,9 +1151,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
     if (taskDataManager == null) {
       taskDataManager = new MybatisTaskDataManager(this);
-    }
-    if (userDataManager == null) {
-      userDataManager = new MybatisUserDataManager(this);
     }
     if (variableInstanceDataManager == null) {
       variableInstanceDataManager = new MybatisVariableInstanceDataManager(this);
@@ -1203,9 +1181,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (executionEntityManager == null) {
       executionEntityManager = new ExecutionEntityManagerImpl(this, executionDataManager);
     }
-    if (groupEntityManager == null) {
-      groupEntityManager = new GroupEntityManagerImpl(this, groupDataManager);
-    }
     if (historicActivityInstanceEntityManager == null) {
       historicActivityInstanceEntityManager = new HistoricActivityInstanceEntityManagerImpl(this, historicActivityInstanceDataManager);
     }
@@ -1224,9 +1199,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     if (historicVariableInstanceEntityManager == null) {
       historicVariableInstanceEntityManager = new HistoricVariableInstanceEntityManagerImpl(this, historicVariableInstanceDataManager);
     }
-    if (identityInfoEntityManager == null) {
-      identityInfoEntityManager = new IdentityInfoEntityManagerImpl(this, identityInfoDataManager);
-    }
+
     if (identityLinkEntityManager == null) {
       identityLinkEntityManager = new IdentityLinkEntityManagerImpl(this, identityLinkDataManager);
     }
@@ -1241,9 +1214,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
     if (deadLetterJobEntityManager == null) {
       deadLetterJobEntityManager = new DeadLetterJobEntityManagerImpl(this, deadLetterJobDataManager);
-    }
-    if (membershipEntityManager == null) {
-      membershipEntityManager = new MembershipEntityManagerImpl(this, membershipDataManager);
     }
     if (modelEntityManager == null) {
       modelEntityManager = new ModelEntityManagerImpl(this, modelDataManager);
@@ -1265,9 +1235,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     }
     if (taskEntityManager == null) {
       taskEntityManager = new TaskEntityManagerImpl(this, taskDataManager);
-    }
-    if (userEntityManager == null) {
-      userEntityManager = new UserEntityManagerImpl(this, userDataManager);
     }
     if (variableInstanceEntityManager == null) {
       variableInstanceEntityManager = new VariableInstanceEntityManagerImpl(this, variableInstanceDataManager);
@@ -2120,15 +2087,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public IdentityService getIdentityService() {
-    return identityService;
-  }
-
-  public ProcessEngineConfigurationImpl setIdentityService(IdentityService identityService) {
-    this.identityService = identityService;
-    return this;
-  }
-
   public TaskService getTaskService() {
     return taskService;
   }
@@ -2957,15 +2915,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public GroupDataManager getGroupDataManager() {
-    return groupDataManager;
-  }
-
-  public ProcessEngineConfigurationImpl setGroupDataManager(GroupDataManager groupDataManager) {
-    this.groupDataManager = groupDataManager;
-    return this;
-  }
-
   public HistoricActivityInstanceDataManager getHistoricActivityInstanceDataManager() {
     return historicActivityInstanceDataManager;
   }
@@ -3020,15 +2969,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public IdentityInfoDataManager getIdentityInfoDataManager() {
-    return identityInfoDataManager;
-  }
-
-  public ProcessEngineConfigurationImpl setIdentityInfoDataManager(IdentityInfoDataManager identityInfoDataManager) {
-    this.identityInfoDataManager = identityInfoDataManager;
-    return this;
-  }
-
   public IdentityLinkDataManager getIdentityLinkDataManager() {
     return identityLinkDataManager;
   }
@@ -3074,14 +3014,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public MembershipDataManager getMembershipDataManager() {
-    return membershipDataManager;
-  }
-
-  public ProcessEngineConfigurationImpl setMembershipDataManager(MembershipDataManager membershipDataManager) {
-    this.membershipDataManager = membershipDataManager;
-    return this;
-  }
 
   public ModelDataManager getModelDataManager() {
     return modelDataManager;
@@ -3134,15 +3066,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public ProcessEngineConfigurationImpl setTaskDataManager(TaskDataManager taskDataManager) {
     this.taskDataManager = taskDataManager;
-    return this;
-  }
-
-  public UserDataManager getUserDataManager() {
-    return userDataManager;
-  }
-
-  public ProcessEngineConfigurationImpl setUserDataManager(UserDataManager userDataManager) {
-    this.userDataManager = userDataManager;
     return this;
   }
 
@@ -3222,15 +3145,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public GroupEntityManager getGroupEntityManager() {
-    return groupEntityManager;
-  }
-
-  public ProcessEngineConfigurationImpl setGroupEntityManager(GroupEntityManager groupEntityManager) {
-    this.groupEntityManager = groupEntityManager;
-    return this;
-  }
-
   public HistoricActivityInstanceEntityManager getHistoricActivityInstanceEntityManager() {
     return historicActivityInstanceEntityManager;
   }
@@ -3285,15 +3199,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public IdentityInfoEntityManager getIdentityInfoEntityManager() {
-    return identityInfoEntityManager;
-  }
-
-  public ProcessEngineConfigurationImpl setIdentityInfoEntityManager(IdentityInfoEntityManager identityInfoEntityManager) {
-    this.identityInfoEntityManager = identityInfoEntityManager;
-    return this;
-  }
-
   public IdentityLinkEntityManager getIdentityLinkEntityManager() {
     return identityLinkEntityManager;
   }
@@ -3339,14 +3244,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public MembershipEntityManager getMembershipEntityManager() {
-    return membershipEntityManager;
-  }
-
-  public ProcessEngineConfigurationImpl setMembershipEntityManager(MembershipEntityManager membershipEntityManager) {
-    this.membershipEntityManager = membershipEntityManager;
-    return this;
-  }
 
   public ModelEntityManager getModelEntityManager() {
     return modelEntityManager;
@@ -3399,15 +3296,6 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
 
   public ProcessEngineConfigurationImpl setTaskEntityManager(TaskEntityManager taskEntityManager) {
     this.taskEntityManager = taskEntityManager;
-    return this;
-  }
-
-  public UserEntityManager getUserEntityManager() {
-    return userEntityManager;
-  }
-
-  public ProcessEngineConfigurationImpl setUserEntityManager(UserEntityManager userEntityManager) {
-    this.userEntityManager = userEntityManager;
     return this;
   }
 

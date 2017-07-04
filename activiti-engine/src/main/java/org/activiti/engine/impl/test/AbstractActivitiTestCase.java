@@ -27,7 +27,6 @@ import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.DynamicBpmnService;
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
-import org.activiti.engine.IdentityService;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -40,6 +39,7 @@ import org.activiti.engine.impl.ProcessEngineImpl;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.db.DbSqlSession;
 import org.activiti.engine.impl.history.HistoryLevel;
+import org.activiti.engine.impl.identity.Authentication;
 import org.activiti.engine.impl.interceptor.Command;
 import org.activiti.engine.impl.interceptor.CommandConfig;
 import org.activiti.engine.impl.interceptor.CommandContext;
@@ -71,7 +71,6 @@ public abstract class AbstractActivitiTestCase extends AbstractTestCase {
   protected TaskService taskService;
   protected FormService formService;
   protected HistoryService historyService;
-  protected IdentityService identityService;
   protected ManagementService managementService;
   protected DynamicBpmnService dynamicBpmnService;
 
@@ -80,7 +79,7 @@ public abstract class AbstractActivitiTestCase extends AbstractTestCase {
     super.setUp();
 
     // Always reset authenticated user to avoid any mistakes
-    identityService.setAuthenticatedUserId(null);
+    Authentication.setAuthenticatedUserId(null);
   }
 
   protected abstract void initializeProcessEngine();
@@ -246,7 +245,6 @@ public abstract class AbstractActivitiTestCase extends AbstractTestCase {
     taskService = processEngine.getTaskService();
     formService = processEngine.getFormService();
     historyService = processEngine.getHistoryService();
-    identityService = processEngine.getIdentityService();
     managementService = processEngine.getManagementService();
     dynamicBpmnService = processEngine.getDynamicBpmnService();
   }
