@@ -59,7 +59,6 @@ public abstract class ActivitiTestCase extends TestCase {
   protected RuntimeService runtimeService;
   protected TaskService taskService;
   protected HistoryService historicDataService;
-  protected IdentityService identityService;
   protected ManagementService managementService;
 
   private ActivitiMockSupport mockSupport;
@@ -114,7 +113,6 @@ public abstract class ActivitiTestCase extends TestCase {
     runtimeService = processEngine.getRuntimeService();
     taskService = processEngine.getTaskService();
     historicDataService = processEngine.getHistoryService();
-    identityService = processEngine.getIdentityService();
     managementService = processEngine.getManagementService();
   }
 

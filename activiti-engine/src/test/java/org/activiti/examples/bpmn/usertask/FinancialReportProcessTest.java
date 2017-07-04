@@ -1,5 +1,6 @@
 package org.activiti.examples.bpmn.usertask;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.activiti.engine.impl.test.PluggableActivitiTestCase;
@@ -9,23 +10,13 @@ import org.activiti.engine.test.Deployment;
 
 public class FinancialReportProcessTest extends PluggableActivitiTestCase {
 
-  public void setUp() throws Exception {
-    identityService.saveUser(identityService.newUser("fozzie"));
-    identityService.saveUser(identityService.newUser("kermit"));
 
-    identityService.saveGroup(identityService.newGroup("accountancy"));
-    identityService.saveGroup(identityService.newGroup("management"));
+  private static final String KERMIT = "kermit";
+  private static final List<String> KERMITSGROUPS = Arrays.asList("management");
 
-    identityService.createMembership("fozzie", "accountancy");
-    identityService.createMembership("kermit", "management");
-  }
+  private static final String FOZZIE = "fozzie";
+  private static final List<String> FOZZIESGROUPS = Arrays.asList("accountancy");
 
-  public void tearDown() throws Exception {
-    identityService.deleteUser("fozzie");
-    identityService.deleteUser("kermit");
-    identityService.deleteGroup("accountancy");
-    identityService.deleteGroup("management");
-  }
 
   @Deployment(resources = { "org/activiti/examples/bpmn/usertask/FinancialReportProcess.bpmn20.xml" })
   public void testProcess() {
@@ -37,15 +28,15 @@ public class FinancialReportProcessTest extends PluggableActivitiTestCase {
     Task task = tasks.get(0);
     assertEquals("Write monthly financial report", task.getName());
 
-    taskService.claim(task.getId(), "fozzie");
-    tasks = taskService.createTaskQuery().taskAssignee("fozzie").list();
+    taskService.claim(task.getId(), FOZZIE);
+    tasks = taskService.createTaskQuery().taskAssignee(FOZZIE).list();
 
     assertEquals(1, tasks.size());
     taskService.complete(task.getId());
 
-    tasks = taskService.createTaskQuery().taskCandidateUser("fozzie").list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(FOZZIE).list();
     assertEquals(0, tasks.size());
-    tasks = taskService.createTaskQuery().taskCandidateUser("kermit").list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT).list();
     assertEquals(1, tasks.size());
     assertEquals("Verify monthly financial report", tasks.get(0).getName());
     taskService.complete(tasks.get(0).getId());

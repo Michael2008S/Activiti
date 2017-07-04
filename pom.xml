@@ -465,6 +465,7 @@
 		<module>activiti-engine</module>
 		<module>activiti-spring</module>
 		<module>activiti-spring-boot</module>
+		<module>activiti-native-identity-service</module>
 	</modules>
 
 	<build>

@@ -24,6 +24,7 @@ import org.activiti.engine.test.Deployment;
 
  */
 public class TaskAssignmentCandidateTest extends PluggableActivitiTestCase {
+/*
 
   public void setUp() throws Exception {
     identityService.saveGroup(identityService.newGroup("accounting"));
@@ -34,6 +35,7 @@ public class TaskAssignmentCandidateTest extends PluggableActivitiTestCase {
     identityService.deleteGroup("accounting");
     identityService.deleteGroup("management");
   }
+*/
 
   @Deployment
   public void testCandidateGroups() {

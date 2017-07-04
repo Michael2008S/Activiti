@@ -26,33 +26,12 @@ import org.activiti.engine.test.Deployment;
  */
 public class CustomTaskAssignmentTest extends PluggableActivitiTestCase {
 
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
-
-    identityService.saveUser(identityService.newUser("kermit"));
-    identityService.saveUser(identityService.newUser("fozzie"));
-    identityService.saveUser(identityService.newUser("gonzo"));
-
-    identityService.saveGroup(identityService.newGroup("management"));
-
-    identityService.createMembership("kermit", "management");
-  }
-
-  @Override
-  protected void tearDown() throws Exception {
-    identityService.deleteUser("kermit");
-    identityService.deleteUser("fozzie");
-    identityService.deleteUser("gonzo");
-    identityService.deleteGroup("management");
-    super.tearDown();
-  }
 
   @Deployment
   public void testCandidateGroupAssignment() {
     runtimeService.startProcessInstanceByKey("customTaskAssignment");
     assertEquals(1, taskService.createTaskQuery().taskCandidateGroup("management").count());
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser("kermit").count());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser("kermit").or().taskCandidateGroup("management").endOr().count());
     assertEquals(0, taskService.createTaskQuery().taskCandidateUser("fozzie").count());
   }
 
