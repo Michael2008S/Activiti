@@ -339,10 +339,10 @@ public class HistoricTaskAndVariablesQueryTest extends PluggableActivitiTestCase
       List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list();
       assertEquals(3, tasks.size());
 
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).list();
       assertEquals(0, tasks.size());
 
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(FOZZIE).or().taskCandidateGroupIn(FOZZIESGROUPS).list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(FOZZIE).or().taskCandidateGroupIn(FOZZIESGROUPS).endOr().list();
       assertEquals(1, tasks.size());
 
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateGroup("management").list();
@@ -353,10 +353,10 @@ public class HistoricTaskAndVariablesQueryTest extends PluggableActivitiTestCase
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateGroupIn(groups).list();
       assertEquals(1, tasks.size());
       
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT).taskCandidateGroupIn(groups).list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(groups).endOr().list();
       assertEquals(3, tasks.size());
       
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).taskCandidateGroupIn(groups).list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(groups).endOr().list();
       assertEquals(1, tasks.size());
       
       Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
@@ -367,7 +367,7 @@ public class HistoricTaskAndVariablesQueryTest extends PluggableActivitiTestCase
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list();
       assertEquals(3, tasks.size());
 
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).list();
       assertEquals(0, tasks.size());
 
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(FOZZIE).or().taskCandidateGroupIn(FOZZIESGROUPS).endOr().list();
