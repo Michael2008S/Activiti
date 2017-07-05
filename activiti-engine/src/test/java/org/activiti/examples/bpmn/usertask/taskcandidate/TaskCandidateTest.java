@@ -97,7 +97,7 @@ public class TaskCandidateTest extends PluggableActivitiTestCase {
     assertEquals(0, taskService.createTaskQuery().taskCandidateGroup("sales").count());
 
     // Gonzo claims the task
-    tasks = taskService.createTaskQuery().taskCandidateUser(GONZO).list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list();
     Task task = tasks.get(0);
     assertEquals("Approve expenses", task.getName());
     taskService.claim(task.getId(), GONZO);

@@ -1156,6 +1156,19 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
     } else if (candidateGroups != null) {
       return candidateGroups;
 
+    } else if(orQueryObjects!=null && orQueryObjects.size()>0){
+      for(TaskQueryImpl condition: orQueryObjects){
+        if(condition.candidateGroups!=null){
+          return condition.candidateGroups;
+        }
+      }
+      for(TaskQueryImpl condition: orQueryObjects){
+        if(condition.candidateGroup!=null){
+          List<String> candidateGroupList = new ArrayList<String>(1);
+          candidateGroupList.add(condition.candidateGroup);
+          return candidateGroupList;
+        }
+      }
     }
     return null;
   }
@@ -1366,10 +1379,28 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
   }
 
   public String getCandidateUser() {
+    if(candidateUser!=null){
+      return candidateUser;
+    }
+    if(orQueryObjects!=null && orQueryObjects.size()>0){
+      for(TaskQueryImpl condition: orQueryObjects){
+        if(condition.candidateUser!=null){
+          return condition.candidateUser;
+        }
+      }
+    }
     return candidateUser;
   }
 
   public String getCandidateGroup() {
+    if(candidateGroup!=null){
+      return candidateGroup;
+    }
+    for(TaskQueryImpl condition: orQueryObjects){
+      if(condition.candidateGroup!=null){
+        return condition.candidateGroup;
+      }
+    }
     return candidateGroup;
   }
 
