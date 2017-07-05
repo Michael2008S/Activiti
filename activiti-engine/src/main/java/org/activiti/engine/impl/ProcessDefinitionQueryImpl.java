@@ -278,7 +278,7 @@ public class ProcessDefinitionQueryImpl extends AbstractQuery<ProcessDefinitionQ
     this.eventSubscriptionName = eventName;
     return this;
   }
-/*
+
   public List<String> getAuthorizationGroups() {
     // Similar behaviour as the TaskQuery.taskCandidateUser() which
     // includes the groups the candidate
@@ -293,7 +293,7 @@ public class ProcessDefinitionQueryImpl extends AbstractQuery<ProcessDefinitionQ
     }
 
     return null;
-  }*/
+  }
 
   // sorting ////////////////////////////////////////////
 
