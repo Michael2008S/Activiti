@@ -459,7 +459,7 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
     if (candidateUser == null) {
       throw new ActivitiIllegalArgumentException("Candidate user is null");
     }
-    
+
     if (orActive) {
       currentOrQueryObject.candidateUser = candidateUser;
     } else {
@@ -506,6 +506,11 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
     
     if (orActive) {
       currentOrQueryObject.candidateGroup = candidateGroup;
+      //copy the candidate user over into the or query for the group if there is one
+      //needed as otherwise it will match on group alone since the or can't see the condition that led to it
+      if(candidateUser!=null && currentOrQueryObject.candidateUser==null){
+        currentOrQueryObject.candidateUser=candidateUser;
+      }
     } else {
       this.candidateGroup = candidateGroup;
     }
@@ -547,6 +552,11 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
     
     if (orActive) {
       currentOrQueryObject.candidateGroups = candidateGroups;
+      //copy the candidate user over into the or query for the group if there is one
+      //needed as otherwise it will match on group alone since the or can't see the condition that led to it
+      if(candidateUser!=null && currentOrQueryObject.candidateUser==null){
+        currentOrQueryObject.candidateUser=candidateUser;
+      }
     } else {
       this.candidateGroups = candidateGroups;
     }
@@ -1627,5 +1637,4 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
   public boolean isOrActive() {
     return orActive;
   }
-
 }
