@@ -122,6 +122,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected TaskService taskService = new TaskServiceImpl(this);
   protected ManagementService managementService = new ManagementServiceImpl();
   protected DynamicBpmnService dynamicBpmnService = new DynamicBpmnServiceImpl(this);
+  protected UserGroupLookupProxy userGroupLookupProxy;
 
   // COMMAND EXECUTORS ////////////////////////////////////////////////////////
 
@@ -2040,7 +2041,16 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public TaskService getTaskService() {
+    @Override
+    public UserGroupLookupProxy getUserGroupLookupProxy() {
+        return userGroupLookupProxy;
+    }
+
+    public void setUserGroupLookupProxy(UserGroupLookupProxy userGroupLookupProxy) {
+        this.userGroupLookupProxy = userGroupLookupProxy;
+    }
+
+    public TaskService getTaskService() {
     return taskService;
   }
 

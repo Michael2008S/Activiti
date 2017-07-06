@@ -130,6 +130,10 @@ public interface TaskInfoQuery<T extends TaskInfoQuery<?, ?>, V extends TaskInfo
    */
   T taskOwnerLikeIgnoreCase(String ownerLikeIgnoreCase);
 
+
+  /** Only select tasks for which the given user is a candidate. If identity service is available then also through user's groups. */
+  T taskCandidateUser(String candidateUser);
+
   /** Only select tasks for which the given user is a candidate. */
   T taskCandidateUser(String candidateUser, List<String> usersGroups);
 
