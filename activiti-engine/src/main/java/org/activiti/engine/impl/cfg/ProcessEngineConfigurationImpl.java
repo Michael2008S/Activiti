@@ -37,7 +37,6 @@ import org.activiti.engine.impl.bpmn.webservice.MessageInstance;
 import org.activiti.engine.impl.calendar.*;
 import org.activiti.engine.impl.cfg.standalone.StandaloneMybatisTransactionContextFactory;
 import org.activiti.engine.impl.cmd.ValidateExecutionRelatedEntityCountCfgCmd;
-import org.activiti.engine.impl.context.Context;
 import org.activiti.engine.impl.db.DbIdGenerator;
 import org.activiti.engine.impl.db.DbSqlSessionFactory;
 import org.activiti.engine.impl.db.IbatisVariableTypeHandler;
@@ -129,6 +128,7 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
   protected FormService formService = new FormServiceImpl();
   protected ManagementService managementService = new ManagementServiceImpl();
   protected DynamicBpmnService dynamicBpmnService = new DynamicBpmnServiceImpl(this);
+  protected UserGroupLookupProxy userGroupLookupProxy;
 
   // COMMAND EXECUTORS ////////////////////////////////////////////////////////
 
@@ -2087,7 +2087,16 @@ public abstract class ProcessEngineConfigurationImpl extends ProcessEngineConfig
     return this;
   }
 
-  public TaskService getTaskService() {
+    @Override
+    public UserGroupLookupProxy getUserGroupLookupProxy() {
+        return userGroupLookupProxy;
+    }
+
+    public void setUserGroupLookupProxy(UserGroupLookupProxy userGroupLookupProxy) {
+        this.userGroupLookupProxy = userGroupLookupProxy;
+    }
+
+    public TaskService getTaskService() {
     return taskService;
   }
 

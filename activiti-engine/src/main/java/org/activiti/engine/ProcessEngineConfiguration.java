@@ -259,6 +259,8 @@ public abstract class ProcessEngineConfiguration {
 
   public abstract ProcessEngineConfiguration getProcessEngineConfiguration();
 
+  public abstract UserGroupLookupProxy getUserGroupLookupProxy();
+
   // getters and setters
   // //////////////////////////////////////////////////////
 

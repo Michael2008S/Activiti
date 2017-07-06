@@ -20,6 +20,7 @@ import java.util.List;
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiIllegalArgumentException;
 import org.activiti.engine.DynamicBpmnConstants;
+import org.activiti.engine.UserGroupLookupProxy;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
 import org.activiti.engine.impl.context.Context;
@@ -30,6 +31,8 @@ import org.activiti.engine.impl.variable.VariableTypes;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
 
@@ -37,6 +40,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class HistoricTaskInstanceQueryImpl extends AbstractVariableQueryImpl<HistoricTaskInstanceQuery, HistoricTaskInstance> implements HistoricTaskInstanceQuery {
 
   private static final long serialVersionUID = 1L;
+
+  private static final Logger log = LoggerFactory.getLogger(HistoricTaskInstanceQueryImpl.class);
+
   protected String processDefinitionId;
   protected String processDefinitionKey;
   protected String processDefinitionKeyLike;
@@ -970,6 +976,20 @@ public class HistoricTaskInstanceQueryImpl extends AbstractVariableQueryImpl<His
     return this;
   }
 
+
+  public HistoricTaskInstanceQuery taskCandidateUser(String candidateUser) {
+    if (candidateUser == null) {
+      throw new ActivitiIllegalArgumentException("Candidate user is null");
+    }
+
+    if (inOrStatement) {
+      this.currentOrQueryObject.candidateUser = candidateUser;
+    } else {
+      this.candidateUser = candidateUser;
+    }
+    return this;
+  }
+
   public HistoricTaskInstanceQuery taskCandidateUser(String candidateUser, List<String> usersGroups) {
     if (candidateUser == null) {
       throw new ActivitiIllegalArgumentException("Candidate user is null");
@@ -1288,6 +1308,18 @@ public class HistoricTaskInstanceQueryImpl extends AbstractVariableQueryImpl<His
     } else if(candidateGroups != null) {
       return candidateGroups;
 
+    } else if (candidateUser != null) {
+      return getGroupsForCandidateUser(candidateUser);
+    }
+    return null;
+  }
+
+  protected List<String> getGroupsForCandidateUser(String candidateUser) {
+    UserGroupLookupProxy userGroupLookupProxy = Context.getProcessEngineConfiguration().getUserGroupLookupProxy();
+    if(userGroupLookupProxy !=null){
+      return userGroupLookupProxy.getGroupsForCandidateUser(candidateUser);
+    } else{
+      log.warn("No UserGroupLookupProxy set on ProcessEngineConfiguration. Tasks queried only where user is directly related, not through groups.");
     }
     return null;
   }

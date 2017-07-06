@@ -20,13 +20,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.UserGroupLookupProxy;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricTaskInstanceQuery;
+import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.history.HistoryLevel;
 import org.activiti.engine.impl.test.PluggableActivitiTestCase;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.test.Deployment;
+import org.mockito.Mockito;
 
 /**
 
@@ -44,8 +47,11 @@ public class HistoricTaskAndVariablesQueryTest extends PluggableActivitiTestCase
   private static final String FOZZIE = "fozzie";
   private static final List<String> FOZZIESGROUPS = Arrays.asList("management");
 
-  public void setUp() throws Exception {
+  private UserGroupLookupProxy userGroupLookupProxy = Mockito.mock(UserGroupLookupProxy.class);
 
+  public void setUp() throws Exception{
+    ProcessEngineConfigurationImpl engineConfiguration = (ProcessEngineConfigurationImpl)cachedProcessEngine.getProcessEngineConfiguration();
+    engineConfiguration.setUserGroupLookupProxy(userGroupLookupProxy);
     taskIds = generateTestTasks();
   }
 
@@ -353,10 +359,10 @@ public class HistoricTaskAndVariablesQueryTest extends PluggableActivitiTestCase
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateGroupIn(groups).list();
       assertEquals(1, tasks.size());
       
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT,groups).list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).taskCandidateGroupIn(groups).list();
       assertEquals(3, tasks.size());
       
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO,groups).list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO,GONZOSGROUPS).taskCandidateGroupIn(groups).list();
       assertEquals(1, tasks.size());
       
       Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).singleResult();
@@ -376,17 +382,69 @@ public class HistoricTaskAndVariablesQueryTest extends PluggableActivitiTestCase
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateGroup("management").list();
       assertEquals(1, tasks.size());
       
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT,Arrays.asList("management")).list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).taskCandidateGroupIn(Arrays.asList("management")).list();
       assertEquals(3, tasks.size());
       
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO,Arrays.asList("management")).list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO,GONZOSGROUPS).taskCandidateGroupIn(Arrays.asList("management")).list();
       assertEquals(1, tasks.size());
       
-      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO,Arrays.asList("invalid")).list();
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO,GONZOSGROUPS).taskCandidateGroupIn(Arrays.asList("invalid")).list();
       assertEquals(0, tasks.size());
       
       tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateGroupIn(groups).list();
       assertEquals(1, tasks.size());
+    }
+  }
+
+
+  @Deployment
+  public void testCandidateWithUserGroupProxy() {
+    //don't specify groups in query calls, instead get them through UserGroupLookupProxy (which could be remote service)
+
+    Mockito.when(userGroupLookupProxy.getGroupsForCandidateUser(KERMIT)).thenReturn(KERMITSGROUPS);
+    Mockito.when(userGroupLookupProxy.getGroupsForCandidateUser(GONZO)).thenReturn(GONZOSGROUPS);
+    Mockito.when(userGroupLookupProxy.getGroupsForCandidateUser(FOZZIE)).thenReturn(FOZZIESGROUPS);
+
+    if (processEngineConfiguration.getHistoryLevel().isAtLeast(HistoryLevel.ACTIVITY)) {
+      ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("oneTaskProcess");
+      List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list();
+      assertEquals(3, tasks.size());
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).list();
+      assertEquals(0, tasks.size());
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(FOZZIE).list();
+      assertEquals(1, tasks.size());
+
+      List<String> groups = new ArrayList<String>();
+      groups.add("management");
+      groups.add("accountancy");
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT).taskCandidateGroupIn(groups).list();
+      assertEquals(3, tasks.size());
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).taskCandidateGroupIn(groups).list();
+      assertEquals(1, tasks.size());
+
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT).list();
+      assertEquals(3, tasks.size());
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).list();
+      assertEquals(0, tasks.size());
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(FOZZIE).list();
+      assertEquals(1, tasks.size());
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(KERMIT).taskCandidateGroupIn(Arrays.asList("management")).list();
+      assertEquals(3, tasks.size());
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).taskCandidateGroupIn(Arrays.asList("management")).list();
+      assertEquals(1, tasks.size());
+
+      tasks = historyService.createHistoricTaskInstanceQuery().taskCandidateUser(GONZO).taskCandidateGroupIn(Arrays.asList("invalid")).list();
+      assertEquals(0, tasks.size());
+
     }
   }
 
