@@ -444,7 +444,7 @@ public class TaskServiceTest extends PluggableActivitiTestCase {
       taskService.addCandidateUser(task.getId(), "kermit");
 
       assertNotNull(taskService.createTaskQuery().taskCandidateGroup("sales").singleResult());
-      assertNotNull(taskService.createTaskQuery().taskCandidateUser("kermit").singleResult());
+      assertNotNull(taskService.createTaskQuery().taskCandidateUser("kermit",null).singleResult());
 
       // Delete identity link for group
       taskService.deleteGroupIdentityLink(task.getId(), "sales", "candidate");
@@ -453,7 +453,7 @@ public class TaskServiceTest extends PluggableActivitiTestCase {
       assertNull(taskService.createTaskQuery().taskCandidateGroup("sales").singleResult());
 
       // User link should remain unaffected
-      assertNotNull(taskService.createTaskQuery().taskCandidateUser("kermit").singleResult());
+      assertNotNull(taskService.createTaskQuery().taskCandidateUser("kermit",null).singleResult());
 
     } finally {
       // Adhoc task not part of deployment, cleanup

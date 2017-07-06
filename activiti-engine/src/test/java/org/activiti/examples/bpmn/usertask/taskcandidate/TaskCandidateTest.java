@@ -47,7 +47,7 @@ public class TaskCandidateTest extends PluggableActivitiTestCase {
     assertTrue(tasks.isEmpty());
 
     // The task should be visible in the candidate task list
-    tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list();
     assertEquals(1, tasks.size());
     Task task = tasks.get(0);
     assertEquals("Pay out expenses", task.getName());
@@ -56,7 +56,7 @@ public class TaskCandidateTest extends PluggableActivitiTestCase {
     taskService.claim(task.getId(), KERMIT);
 
     // The task must now be gone from the candidate task list
-    tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list();
     assertTrue(tasks.isEmpty());
 
     // The task will be visible on the personal task list
@@ -87,22 +87,22 @@ public class TaskCandidateTest extends PluggableActivitiTestCase {
 
     // The task should be visible in the candidate task list of Gonzo and
     // Kermit
-    // and anyone in the management/accountancy group
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list().size());
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list().size());
+    // and anyone in the mgmt/accountancy group
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list().size());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(GONZO,GONZOSGROUPS).list().size());
     assertEquals(1, taskService.createTaskQuery().taskCandidateGroup("management").count());
     assertEquals(1, taskService.createTaskQuery().taskCandidateGroup("accountancy").count());
     assertEquals(0, taskService.createTaskQuery().taskCandidateGroup("sales").count());
 
     // Gonzo claims the task
-    tasks = taskService.createTaskQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(GONZO,GONZOSGROUPS).list();
     Task task = tasks.get(0);
     assertEquals("Approve expenses", task.getName());
     taskService.claim(task.getId(), GONZO);
 
     // The task must now be gone from the candidate task lists
-    assertTrue(taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list().isEmpty());
-    assertTrue(taskService.createTaskQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list().isEmpty());
+    assertTrue(taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list().isEmpty());
+    assertTrue(taskService.createTaskQuery().taskCandidateUser(GONZO,GONZOSGROUPS).list().isEmpty());
     assertEquals(0, taskService.createTaskQuery().taskCandidateGroup("management").count());
 
     // The task will be visible on the personal task list of Gonzo
@@ -121,8 +121,8 @@ public class TaskCandidateTest extends PluggableActivitiTestCase {
   public void testMultipleCandidateUsers() {
     runtimeService.startProcessInstanceByKey("multipleCandidateUsersExample", Collections.singletonMap("Variable", (Object) "var"));
 
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list().size());
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list().size());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(GONZO,GONZOSGROUPS).list().size());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list().size());
 
     List<Task> tasks = taskService.createTaskQuery().taskInvolvedUser(KERMIT).list();
     assertEquals(1, tasks.size());
@@ -146,8 +146,8 @@ public class TaskCandidateTest extends PluggableActivitiTestCase {
   public void testMixedCandidateUserAndGroup() {
     runtimeService.startProcessInstanceByKey("mixedCandidateUserAndGroupExample");
 
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list().size());
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list().size());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(GONZO,GONZOSGROUPS).list().size());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list().size());
   }
 
   // test if candidate group works with expression, when there is a function
@@ -158,7 +158,7 @@ public class TaskCandidateTest extends PluggableActivitiTestCase {
     params.put("testBean", new TestBean());
 
     runtimeService.startProcessInstanceByKey("candidateWithExpression", params);
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list().size());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list().size());
 
   }
 
@@ -170,7 +170,7 @@ public class TaskCandidateTest extends PluggableActivitiTestCase {
     params.put("testBean", new TestBean());
 
     runtimeService.startProcessInstanceByKey("candidateWithExpression", params);
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().count());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).count());
     assertEquals(1, taskService.createTaskQuery().taskCandidateGroup("sales").count());
   }
 

@@ -12,6 +12,7 @@
  */
 package org.activiti.examples.bpmn.tasklistener;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,16 +32,16 @@ public class CustomTaskAssignmentTest extends PluggableActivitiTestCase {
   public void testCandidateGroupAssignment() {
     runtimeService.startProcessInstanceByKey("customTaskAssignment");
     assertEquals(1, taskService.createTaskQuery().taskCandidateGroup("management").count());
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser("kermit").or().taskCandidateGroup("management").endOr().count());
-    assertEquals(0, taskService.createTaskQuery().taskCandidateUser("fozzie").count());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser("kermit", Arrays.asList("management")).count());
+    assertEquals(0, taskService.createTaskQuery().taskCandidateUser("fozzie",null).count());
   }
 
   @Deployment
   public void testCandidateUserAssignment() {
     runtimeService.startProcessInstanceByKey("customTaskAssignment");
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser("kermit").count());
-    assertEquals(1, taskService.createTaskQuery().taskCandidateUser("fozzie").count());
-    assertEquals(0, taskService.createTaskQuery().taskCandidateUser("gonzo").count());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser("kermit",null).count());
+    assertEquals(1, taskService.createTaskQuery().taskCandidateUser("fozzie",null).count());
+    assertEquals(0, taskService.createTaskQuery().taskCandidateUser("gonzo",null).count());
   }
 
   @Deployment

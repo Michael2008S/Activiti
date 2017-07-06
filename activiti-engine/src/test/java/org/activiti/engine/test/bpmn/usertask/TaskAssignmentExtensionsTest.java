@@ -67,9 +67,9 @@ public class TaskAssignmentExtensionsTest extends PluggableActivitiTestCase {
   @Deployment
   public void testCandidateUsersExtension() {
     runtimeService.startProcessInstanceByKey("candidateUsersExtension");
-    List<Task> tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list();
+    List<Task> tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list();
     assertEquals(1, tasks.size());
-    tasks = taskService.createTaskQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(GONZO,GONZOSGROUPS).list();
     assertEquals(1, tasks.size());
   }
 
@@ -79,11 +79,11 @@ public class TaskAssignmentExtensionsTest extends PluggableActivitiTestCase {
 
     // Bugfix check: potentially the query could return 2 tasks since
     // kermit is a member of the two candidate groups
-    List<Task> tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr().list();
+    List<Task> tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list();
     assertEquals(1, tasks.size());
     assertEquals("make profit", tasks.get(0).getName());
 
-    tasks = taskService.createTaskQuery().taskCandidateUser(FOZZIE).or().taskCandidateGroupIn(FOZZIESGROUPS).endOr().list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(FOZZIE,FOZZIESGROUPS).list();
     assertEquals(1, tasks.size());
     assertEquals("make profit", tasks.get(0).getName());
 
@@ -99,16 +99,16 @@ public class TaskAssignmentExtensionsTest extends PluggableActivitiTestCase {
   public void testMixedCandidateUserDefinition() {
     runtimeService.startProcessInstanceByKey("mixedCandidateUser");
 
-    List<Task> tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).list();
+    List<Task> tasks = taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS).list();
     assertEquals(1, tasks.size());
 
-    tasks = taskService.createTaskQuery().taskCandidateUser(FOZZIE).or().taskCandidateGroupIn(FOZZIESGROUPS).endOr().list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(FOZZIE,FOZZIESGROUPS).list();
     assertEquals(1, tasks.size());
 
-    tasks = taskService.createTaskQuery().taskCandidateUser(GONZO).or().taskCandidateGroupIn(GONZOSGROUPS).endOr().list();
+    tasks = taskService.createTaskQuery().taskCandidateUser(GONZO,GONZOSGROUPS).list();
     assertEquals(1, tasks.size());
 
-    tasks = taskService.createTaskQuery().taskCandidateUser("mispiggy").list();
+    tasks = taskService.createTaskQuery().taskCandidateUser("mispiggy",null).list();
     assertEquals(0, tasks.size());
   }
 

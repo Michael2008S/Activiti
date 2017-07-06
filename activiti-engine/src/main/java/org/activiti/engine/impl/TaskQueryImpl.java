@@ -455,15 +455,17 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
     return this;
   }
 
-  public TaskQueryImpl taskCandidateUser(String candidateUser) {
+  public TaskQueryImpl taskCandidateUser(String candidateUser, List<String> usersGroups) {
     if (candidateUser == null) {
       throw new ActivitiIllegalArgumentException("Candidate user is null");
     }
 
     if (orActive) {
       currentOrQueryObject.candidateUser = candidateUser;
+      currentOrQueryObject.candidateGroups = usersGroups;
     } else {
       this.candidateUser = candidateUser;
+      this.candidateGroups = usersGroups;
     }
 
     return this;
@@ -506,11 +508,6 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
     
     if (orActive) {
       currentOrQueryObject.candidateGroup = candidateGroup;
-      //copy the candidate user over into the or query for the group if there is one
-      //needed as otherwise it will match on group alone since the or can't see the condition that led to it
-      if(candidateUser!=null && currentOrQueryObject.candidateUser==null){
-        currentOrQueryObject.candidateUser=candidateUser;
-      }
     } else {
       this.candidateGroup = candidateGroup;
     }
@@ -518,7 +515,7 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
   }
 
   @Override
-  public TaskQuery taskCandidateOrAssigned(String userIdForCandidateAndAssignee) {
+  public TaskQuery taskCandidateOrAssigned(String userIdForCandidateAndAssignee, List<String> usersGroups) {
     if (candidateGroup != null) {
       throw new ActivitiIllegalArgumentException("Invalid query usage: cannot set candidateGroup");
     }
@@ -529,9 +526,11 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
     if(orActive) {
       currentOrQueryObject.bothCandidateAndAssigned = true;
       currentOrQueryObject.userIdForCandidateAndAssignee = userIdForCandidateAndAssignee;
+      currentOrQueryObject.candidateGroups = usersGroups;
     } else {
       this.bothCandidateAndAssigned = true;
       this.userIdForCandidateAndAssignee = userIdForCandidateAndAssignee;
+      this.candidateGroups = usersGroups;
     }
 
     return this;
@@ -552,11 +551,6 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
     
     if (orActive) {
       currentOrQueryObject.candidateGroups = candidateGroups;
-      //copy the candidate user over into the or query for the group if there is one
-      //needed as otherwise it will match on group alone since the or can't see the condition that led to it
-      if(candidateUser!=null && currentOrQueryObject.candidateUser==null){
-        currentOrQueryObject.candidateUser=candidateUser;
-      }
     } else {
       this.candidateGroups = candidateGroups;
     }
@@ -1166,19 +1160,6 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
     } else if (candidateGroups != null) {
       return candidateGroups;
 
-    } else if(orQueryObjects!=null && orQueryObjects.size()>0){
-      for(TaskQueryImpl condition: orQueryObjects){
-        if(condition.candidateGroups!=null){
-          return condition.candidateGroups;
-        }
-      }
-      for(TaskQueryImpl condition: orQueryObjects){
-        if(condition.candidateGroup!=null){
-          List<String> candidateGroupList = new ArrayList<String>(1);
-          candidateGroupList.add(condition.candidateGroup);
-          return candidateGroupList;
-        }
-      }
     }
     return null;
   }
@@ -1389,28 +1370,10 @@ public class TaskQueryImpl extends AbstractVariableQueryImpl<TaskQuery, Task> im
   }
 
   public String getCandidateUser() {
-    if(candidateUser!=null){
-      return candidateUser;
-    }
-    if(orQueryObjects!=null && orQueryObjects.size()>0){
-      for(TaskQueryImpl condition: orQueryObjects){
-        if(condition.candidateUser!=null){
-          return condition.candidateUser;
-        }
-      }
-    }
     return candidateUser;
   }
 
   public String getCandidateGroup() {
-    if(candidateGroup!=null){
-      return candidateGroup;
-    }
-    for(TaskQueryImpl condition: orQueryObjects){
-      if(condition.candidateGroup!=null){
-        return condition.candidateGroup;
-      }
-    }
     return candidateGroup;
   }
 

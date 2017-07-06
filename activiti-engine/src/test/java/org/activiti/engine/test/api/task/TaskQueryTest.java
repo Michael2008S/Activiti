@@ -725,7 +725,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryByCandidateUser() {
-    TaskQuery query = taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS).endOr();
+    TaskQuery query = taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS);
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
     try {
@@ -735,7 +735,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
       // OK
     }
 
-    query = taskService.createTaskQuery().taskCandidateUser(FOZZIE).or().taskCandidateGroupIn(FOZZIESGROUPS).endOr();
+    query = taskService.createTaskQuery().taskCandidateUser(FOZZIE,FOZZIESGROUPS);
     assertEquals(3, query.count());
     assertEquals(3, query.list().size());
     try {
@@ -747,7 +747,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryByCandidateUserOr() {
-    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser(KERMIT).taskCandidateGroupIn(KERMITSGROUPS);
+    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser(KERMIT,KERMITSGROUPS);
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
     try {
@@ -757,7 +757,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
       // OK
     }
 
-    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser(FOZZIE).taskCandidateGroupIn(FOZZIESGROUPS);
+    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser(FOZZIE,FOZZIESGROUPS);
     assertEquals(3, query.count());
     assertEquals(3, query.list().size());
     try {
@@ -770,7 +770,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
 
   public void testQueryByNullCandidateUser() {
     try {
-      taskService.createTaskQuery().taskCandidateUser(null).list();
+      taskService.createTaskQuery().taskCandidateUser(null,null).list();
       fail();
     } catch (ActivitiIllegalArgumentException e) {
     }
@@ -778,7 +778,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
 
   public void testQueryByNullCandidateUserOr() {
     try {
-      taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser(null).list();
+      taskService.createTaskQuery().or().taskId("invalid").taskCandidateUser(null,null).list();
       fail();
     } catch (ActivitiIllegalArgumentException e) {
     }
@@ -817,7 +817,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryByCandidateOrAssigned() {
-    TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(KERMIT);
+    TaskQuery query = taskService.createTaskQuery().taskCandidateOrAssigned(KERMIT,KERMITSGROUPS);
     assertEquals(11, query.count());
     List<Task> tasks = query.list();
     assertEquals(11, tasks.size());
@@ -828,12 +828,12 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     candidateGroups.add("management");
     candidateGroups.add("accountancy");
     candidateGroups.add("noexist");
-    query = taskService.createTaskQuery().taskCandidateGroupIn(candidateGroups).taskCandidateOrAssigned(KERMIT);
+    query = taskService.createTaskQuery().taskCandidateGroupIn(candidateGroups).taskCandidateOrAssigned(KERMIT,KERMITSGROUPS);
     assertEquals(11, query.count());
     tasks = query.list();
     assertEquals(11, tasks.size());
 
-    query = taskService.createTaskQuery().taskCandidateOrAssigned(FOZZIE);
+    query = taskService.createTaskQuery().taskCandidateOrAssigned(FOZZIE,FOZZIESGROUPS);
     assertEquals(3, query.count());
     assertEquals(3, query.list().size());
 
@@ -845,7 +845,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     task.setAssignee(KERMIT);
     taskService.saveTask(task);
 
-    query = taskService.createTaskQuery().taskCandidateOrAssigned(KERMIT);
+    query = taskService.createTaskQuery().taskCandidateOrAssigned(KERMIT,KERMITSGROUPS);
     assertEquals(12, query.count());
     tasks = query.list();
     assertEquals(12, tasks.size());
@@ -858,7 +858,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryByCandidateOrAssignedOr() {
-    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned(KERMIT);
+    TaskQuery query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned(KERMIT,KERMITSGROUPS);
     assertEquals(11, query.count());
     List<Task> tasks = query.list();
     assertEquals(11, tasks.size());
@@ -869,12 +869,13 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     candidateGroups.add("management");
     candidateGroups.add("accountancy");
     candidateGroups.add("noexist");
-    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateGroupIn(candidateGroups).taskCandidateOrAssigned(KERMIT);
+    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateGroupIn(candidateGroups).taskCandidateOrAssigned(KERMIT,KERMITSGROUPS);
+    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateGroupIn(candidateGroups).taskCandidateOrAssigned(KERMIT,KERMITSGROUPS);
     assertEquals(11, query.count());
     tasks = query.list();
     assertEquals(11, tasks.size());
 
-    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned(FOZZIE);
+    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned(FOZZIE,FOZZIESGROUPS);
     assertEquals(3, query.count());
     assertEquals(3, query.list().size());
 
@@ -886,7 +887,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     task.setAssignee(KERMIT);
     taskService.saveTask(task);
 
-    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned(KERMIT);
+    query = taskService.createTaskQuery().or().taskId("invalid").taskCandidateOrAssigned(KERMIT,KERMITSGROUPS);
     assertEquals(12, query.count());
     tasks = query.list();
     assertEquals(12, tasks.size());
@@ -929,15 +930,15 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
       // OK
     }
     
-    query = taskService.createTaskQuery().taskCandidateUser(KERMIT).taskCandidateGroupIn(groups);
+    query = taskService.createTaskQuery().taskCandidateUser(KERMIT,groups);
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
     
-    query = taskService.createTaskQuery().taskCandidateUser(KERMIT).taskCandidateGroup("unexisting");
+    query = taskService.createTaskQuery().taskCandidateUser(KERMIT,Arrays.asList("unexisting"));
     assertEquals(6, query.count());
     assertEquals(6, query.list().size());
     
-    query = taskService.createTaskQuery().taskCandidateUser("unexisting").taskCandidateGroup("unexisting");
+    query = taskService.createTaskQuery().taskCandidateUser("unexisting",Arrays.asList("unexisting"));
     assertEquals(0, query.count());
     assertEquals(0, query.list().size());
 
@@ -962,20 +963,20 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
       // OK
     }
     
-    query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT).taskCandidateGroupIn(groups).endOr();
+    query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT,KERMITSGROUPS).taskCandidateGroupIn(groups).endOr();
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
     
-    query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT).taskCandidateGroup("unexisting").endOr();
+    query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT,KERMITSGROUPS).taskCandidateGroup("unexisting").endOr();
     assertEquals(6, query.count());
     assertEquals(6, query.list().size());
     
-    query = taskService.createTaskQuery().or().taskCandidateUser("unexisting").taskCandidateGroup("unexisting").endOr();
+    query = taskService.createTaskQuery().or().taskCandidateUser("unexisting",null).taskCandidateGroup("unexisting").endOr();
     assertEquals(0, query.count());
     assertEquals(0, query.list().size());
     
-    query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT).taskCandidateGroupIn(groups).endOr()
-        .or().taskCandidateUser(GONZO).taskCandidateGroupIn(groups);
+    query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT,KERMITSGROUPS).taskCandidateGroupIn(groups).endOr()
+        .or().taskCandidateUser(GONZO,GONZOSGROUPS).taskCandidateGroupIn(groups);
     assertEquals(5, query.count());
     assertEquals(5, query.list().size());
     
@@ -2203,7 +2204,7 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
   }
 
   public void testQueryPaging() {
-    TaskQuery query = taskService.createTaskQuery().taskCandidateUser(KERMIT).or().taskCandidateGroupIn(KERMITSGROUPS);
+    TaskQuery query = taskService.createTaskQuery().taskCandidateUser(KERMIT,KERMITSGROUPS);
 
     assertEquals(11, query.listPage(0, Integer.MAX_VALUE).size());
 

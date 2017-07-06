@@ -1,6 +1,7 @@
 package org.activiti.engine.test.api.runtime;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.activiti.engine.impl.history.HistoryLevel;
@@ -129,7 +130,7 @@ public class TaskInvolvementTest  extends PluggableActivitiTestCase {
             assertEquals(2, taskService.createTaskQuery()
                     //.taskId(adhocTask.getId())
                     .or()
-                    .taskCandidateUser("user1")
+                    .taskCandidateUser("user1", Arrays.asList("group1"))
                     .taskInvolvedGroupsIn(groups)
                     .endOr()
                     .count());
