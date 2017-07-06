@@ -42,18 +42,18 @@ public class StandaloneTaskTest extends PluggableActivitiTestCase {
     taskService.addCandidateUser(taskId, "gonzo");
 
     // Retrieve task list for kermit
-    List<Task> tasks = taskService.createTaskQuery().taskCandidateUser("kermit").list();
+    List<Task> tasks = taskService.createTaskQuery().taskCandidateUser("kermit",null).list();
     assertEquals(1, tasks.size());
     assertEquals("testTask", tasks.get(0).getName());
 
     // Retrieve task list for gonzo
-    tasks = taskService.createTaskQuery().taskCandidateUser("gonzo").list();
+    tasks = taskService.createTaskQuery().taskCandidateUser("gonzo",null).list();
     assertEquals(1, tasks.size());
     assertEquals("testTask", tasks.get(0).getName());
 
     task.setName("Update name");
     taskService.saveTask(task);
-    tasks = taskService.createTaskQuery().taskCandidateUser("kermit").list();
+    tasks = taskService.createTaskQuery().taskCandidateUser("kermit",null).list();
     assertEquals(1, tasks.size());
     assertEquals("Update name", tasks.get(0).getName());
 
@@ -61,8 +61,8 @@ public class StandaloneTaskTest extends PluggableActivitiTestCase {
     taskService.claim(taskId, "kermit");
 
     // Tasks shouldn't appear in the candidate tasklists anymore
-    assertTrue(taskService.createTaskQuery().taskCandidateUser("kermit").list().isEmpty());
-    assertTrue(taskService.createTaskQuery().taskCandidateUser("gonzo").list().isEmpty());
+    assertTrue(taskService.createTaskQuery().taskCandidateUser("kermit",null).list().isEmpty());
+    assertTrue(taskService.createTaskQuery().taskCandidateUser("gonzo",null).list().isEmpty());
 
     // Complete task
     taskService.deleteTask(taskId, true);

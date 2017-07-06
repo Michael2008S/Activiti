@@ -970,15 +970,17 @@ public class HistoricTaskInstanceQueryImpl extends AbstractVariableQueryImpl<His
     return this;
   }
 
-  public HistoricTaskInstanceQuery taskCandidateUser(String candidateUser) {
+  public HistoricTaskInstanceQuery taskCandidateUser(String candidateUser, List<String> usersGroups) {
     if (candidateUser == null) {
       throw new ActivitiIllegalArgumentException("Candidate user is null");
     }
     
     if (inOrStatement) {
       this.currentOrQueryObject.candidateUser = candidateUser;
+      this.currentOrQueryObject.candidateGroups = usersGroups;
     } else {
       this.candidateUser = candidateUser;
+      this.candidateGroups = usersGroups;
     }
     return this;
   }
@@ -991,13 +993,9 @@ public class HistoricTaskInstanceQueryImpl extends AbstractVariableQueryImpl<His
     if (candidateGroups != null) {
       throw new ActivitiIllegalArgumentException("Invalid query usage: cannot set both candidateGroup and candidateGroupIn");
     }
+
     if (inOrStatement) {
       this.currentOrQueryObject.candidateGroup = candidateGroup;
-      //copy the candidate user over into the or query for the group if there is one
-      //needed as otherwise it will match on group alone since the or can't see the condition that led to it
-      if(candidateUser!=null && currentOrQueryObject.candidateUser==null){
-        currentOrQueryObject.candidateUser=candidateUser;
-      }
     } else {
       this.candidateGroup = candidateGroup;
     }
@@ -1016,13 +1014,9 @@ public class HistoricTaskInstanceQueryImpl extends AbstractVariableQueryImpl<His
     if (candidateGroup != null) {
       throw new ActivitiIllegalArgumentException("Invalid query usage: cannot set both candidateGroupIn and candidateGroup");
     }
+
     if (inOrStatement) {
       this.currentOrQueryObject.candidateGroups = candidateGroups;
-      //copy the candidate user over into the or query for the group if there is one
-      //needed as otherwise it will match on group alone since the or can't see the condition that led to it
-      if(candidateUser!=null && currentOrQueryObject.candidateUser==null){
-        currentOrQueryObject.candidateUser=candidateUser;
-      }
     } else {
       this.candidateGroups = candidateGroups;
     }
@@ -1285,29 +1279,15 @@ public class HistoricTaskInstanceQueryImpl extends AbstractVariableQueryImpl<His
     return specialOrderBy;
   }
 
-
-  public List<String> getCandidateGroups(){
+  public List<String> getCandidateGroups() {
     if (candidateGroup != null) {
       List<String> candidateGroupList = new ArrayList<String>(1);
       candidateGroupList.add(candidateGroup);
       return candidateGroupList;
 
-    } else if (candidateGroups != null) {
+    } else if(candidateGroups != null) {
       return candidateGroups;
 
-    } else if(orQueryObjects!=null && orQueryObjects.size()>0){
-      for(HistoricTaskInstanceQueryImpl condition: orQueryObjects){
-        if(condition.candidateGroups!=null){
-          return condition.candidateGroups;
-        }
-      }
-      for(HistoricTaskInstanceQueryImpl condition: orQueryObjects){
-        if(condition.candidateGroup!=null){
-          List<String> candidateGroupList = new ArrayList<String>(1);
-          candidateGroupList.add(condition.candidateGroup);
-          return candidateGroupList;
-        }
-      }
     }
     return null;
   }
@@ -1538,31 +1518,12 @@ public class HistoricTaskInstanceQueryImpl extends AbstractVariableQueryImpl<His
   }
 
   public String getCandidateUser() {
-    if(candidateUser!=null){
-      return candidateUser;
-    }
-    if(orQueryObjects!=null && orQueryObjects.size()>0){
-      for(HistoricTaskInstanceQueryImpl condition: orQueryObjects){
-        if(condition.candidateUser!=null){
-          return condition.candidateUser;
-        }
-      }
-    }
     return candidateUser;
   }
 
   public String getCandidateGroup() {
-    if(candidateGroup!=null){
-      return candidateGroup;
-    }
-    for(HistoricTaskInstanceQueryImpl condition: orQueryObjects){
-      if(condition.candidateGroup!=null){
-        return condition.candidateGroup;
-      }
-    }
     return candidateGroup;
   }
-
 
   public String getInvolvedUser() {
     return involvedUser;

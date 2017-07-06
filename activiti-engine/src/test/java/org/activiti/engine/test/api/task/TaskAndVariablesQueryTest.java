@@ -94,13 +94,13 @@ public class TaskAndVariablesQueryTest extends PluggableActivitiTestCase {
     assertEquals(123, task.getProcessVariables().get("anotherProcessVar"));
     assertEquals("This is a binary process variable", new String((byte[]) task.getProcessVariables().get("binaryVariable")));
 
-    tasks = taskService.createTaskQuery().includeTaskLocalVariables().taskCandidateUser(KERMIT).list();
+    tasks = taskService.createTaskQuery().includeTaskLocalVariables().taskCandidateUser(KERMIT,KERMITSGROUPS).list();
     assertEquals(2, tasks.size());
     assertEquals(2, tasks.get(0).getTaskLocalVariables().size());
     assertEquals("test", tasks.get(0).getTaskLocalVariables().get("test"));
     assertEquals(0, tasks.get(0).getProcessVariables().size());
 
-    tasks = taskService.createTaskQuery().includeProcessVariables().taskCandidateUser(KERMIT).list();
+    tasks = taskService.createTaskQuery().includeProcessVariables().taskCandidateUser(KERMIT,KERMITSGROUPS).list();
     assertEquals(2, tasks.size());
     assertEquals(0, tasks.get(0).getProcessVariables().size());
     assertEquals(0, tasks.get(0).getTaskLocalVariables().size());
