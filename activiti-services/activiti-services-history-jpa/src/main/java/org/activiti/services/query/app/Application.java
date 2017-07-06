@@ -1,6 +1,6 @@
-package org.activiti.services.history.app;
+package org.activiti.services.query.app;
 
-import org.activiti.services.history.app.events.ProcessEngineEventEntity;
+import org.activiti.services.query.app.events.ProcessEngineEventEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,4 +24,5 @@ public class Application {
         System.out.println(">>>> Recieved Event" + event);
         eventStoreRestResource.save(event);
     }
+
 }
