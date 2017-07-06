@@ -985,7 +985,11 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     } catch (ActivitiException e) {
       // OK
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d704c3d3f... engine tests now pass but need to restore ability to query user without groups
     query = taskService.createTaskQuery().taskCandidateUser(KERMIT,groups);
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
@@ -1018,7 +1022,11 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     } catch (ActivitiException e) {
       // OK
     }
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d704c3d3f... engine tests now pass but need to restore ability to query user without groups
     query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT,KERMITSGROUPS).taskCandidateGroupIn(groups).endOr();
     assertEquals(11, query.count());
     assertEquals(11, query.list().size());
@@ -1030,7 +1038,11 @@ public class TaskQueryTest extends PluggableActivitiTestCase {
     query = taskService.createTaskQuery().or().taskCandidateUser("unexisting",null).taskCandidateGroup("unexisting").endOr();
     assertEquals(0, query.count());
     assertEquals(0, query.list().size());
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d704c3d3f... engine tests now pass but need to restore ability to query user without groups
     query = taskService.createTaskQuery().or().taskCandidateUser(KERMIT,KERMITSGROUPS).taskCandidateGroupIn(groups).endOr()
         .or().taskCandidateUser(GONZO,GONZOSGROUPS).taskCandidateGroupIn(groups);
     assertEquals(5, query.count());
