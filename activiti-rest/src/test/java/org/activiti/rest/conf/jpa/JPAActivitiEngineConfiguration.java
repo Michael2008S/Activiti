@@ -5,7 +5,6 @@ import javax.sql.DataSource;
 
 import org.activiti.engine.FormService;
 import org.activiti.engine.HistoryService;
-import org.activiti.engine.IdentityService;
 import org.activiti.engine.ManagementService;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngineConfiguration;
@@ -90,11 +89,6 @@ public class JPAActivitiEngineConfiguration {
   @Bean
   public FormService formService() {
     return processEngine().getFormService();
-  }
-
-  @Bean
-  public IdentityService identityService() {
-    return processEngine().getIdentityService();
   }
 
   @Bean

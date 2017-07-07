@@ -363,11 +363,23 @@
 				<scope>import</scope>
 			</dependency>
 
-<dependency>
-  <groupId>org.keycloak</groupId>
-  <artifactId>keycloak-spring-boot-2-adapter</artifactId>
-  <version>${keycloak.version}</version>
-</dependency>
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-core</artifactId>
+				<version>3.2.0.Final</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-spring-security-adapter</artifactId>
+				<version>3.2.0.Final</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.keycloak</groupId>
+				<artifactId>keycloak-spring-boot-2-adapter</artifactId>
+				<version>${keycloak.version}</version>
+			</dependency>
 
 			<!--
 			keycloak boot 2 adapter only proven with jetty and undertow
@@ -461,7 +473,7 @@
 		<module>activiti-engine</module>
 		<module>activiti-spring</module>
 		<module>activiti-spring-boot</module>
-		<module>activiti-native-identity-service</module>
+		<module>activiti-keycloak-identity-service</module>
 	</modules>
 
 	<build>
