@@ -28,7 +28,15 @@
 			<mockito.version>2.7.22</mockito.version>
 			<assertj.version>3.8.0</assertj.version>
 
-        <!-- plugins -->
+        <!--keycloak snapshot that was used to build boot2 adapter
+        the original snapshot doesn't contain the boot2 adapter, just this particular build
+        see https://issues.jboss.org/browse/KEYCLOAK-5098
+        https://github.com/keycloak/keycloak/pull/4279
+        -->
+        <keycloak.version>3.2.0.CR1-SNAPSHOT</keycloak.version>
+
+
+      <!-- plugins -->
         <maven.enforcer.plugin.version>1.4.1</maven.enforcer.plugin.version>
         <jacoco.maven.plugin.version>0.7.9</jacoco.maven.plugin.version>
 
