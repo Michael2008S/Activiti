@@ -22,12 +22,14 @@
     <!-- JVM params for test execution -->
     <argLine>-Duser.language=en</argLine>
 
-
+    <!-- using SNAPSHOT version to benefit from https://github.com/spring-projects/spring-hateoas/issues/583 -->
+    <spring.hateoas.version>0.24.0.BUILD-SNAPSHOT</spring.hateoas.version>
     <spring.boot.version>2.0.0.M2</spring.boot.version>
     <spring.cloud.version>Finchley.BUILD-SNAPSHOT</spring.cloud.version>
     <spring.cloud.stream.version>Elmhurst.BUILD-SNAPSHOT</spring.cloud.stream.version>
     <mockito.version>2.7.22</mockito.version>
     <assertj.version>3.8.0</assertj.version>
+
 
     <!-- plugins -->
     <maven.enforcer.plugin.version>1.4.1</maven.enforcer.plugin.version>
@@ -234,6 +236,11 @@
         <groupId>org.activiti</groupId>
         <artifactId>activiti-bpmn-model</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.hateoas</groupId>
+        <artifactId>spring-hateoas</artifactId>
+        <version>${spring.hateoas.version}</version>
       </dependency>
       <dependency>
         <groupId>org.activiti</groupId>
